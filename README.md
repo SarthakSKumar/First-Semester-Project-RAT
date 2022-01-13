@@ -1,2 +1,3 @@
-# First-Year-Project-RAT-
-Backtracking algorithms to solve problems
+# First Semester Project - RAT
+
+Solving constraint satidfaction problems using Recursive Algorithm Tools
