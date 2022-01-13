@@ -1,3 +1,3 @@
 # First Semester Project - RAT
 
-Solving constraint satidfaction problems using Recursive Algorithm Tools
+Solving constraint satisfaction problems using Recursive Algorithm Tools
