@@ -43,7 +43,7 @@ def generate(difficulty, make_small_boxes):
 	if(is_puzzle_valid(initial, make_small_boxes(initial))):
 		return initial
 	else:
-		print("Not valid")
+		return None
 
 def is_puzzle_valid(board, small_boxes):
 	

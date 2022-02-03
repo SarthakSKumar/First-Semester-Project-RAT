@@ -1,8 +1,10 @@
 import math
 from generate_random import generate
-
-global solution
-solution = None
+from pynput import keyboard
+import multiprocessing
+import threading
+import time
+import sys
 
 #Split the 9x9 puzzle into the 3x3 squares
 def make_small_boxes(current_board):
@@ -39,8 +41,11 @@ def empty(board):
 
     return None
 
-#Check if puzzle is valid
+#Check whether board is valid if number is inserted in given position
 def is_position_valid(board, small_boxes, number, position):
+
+    if(board[position[0]][position[1]] != 0):
+        return False
 
     for i in range(9):
         if((i != position[1]) and (number == board[position[0]][i])):
@@ -55,6 +60,7 @@ def is_position_valid(board, small_boxes, number, position):
 
     return True
 
+#Solving algorithm
 def solve(puzzle, small_boxes):
 
     print("/"*100)
@@ -64,7 +70,7 @@ def solve(puzzle, small_boxes):
     if not empty_position:
         return True
     else:
-        row, column = empty(puzzle)
+        row, column = empty_position
 
     for i in range(1, 10):
 
@@ -77,10 +83,51 @@ def solve(puzzle, small_boxes):
 
             puzzle[row][column] = 0
 
-    solution = puzzle
-
     return False
-                
+
+def user_solution(puzzle):
+    while empty(puzzle):
+
+        try:
+            number = int(input("Enter a number: ").strip())
+            row = int(input("Enter the row: ").strip())
+            column = int(input("Enter the column: ").strip())
+
+        except ValueError:
+            print("Wrong Input")
+            continue
+        except EOFError:
+            continue
+
+        if(is_position_valid(puzzle, make_small_boxes(puzzle), number, (row, column))):
+            puzzle[row][column] = number
+            display_board(puzzle)
+        else:
+            print(f"You can't put {number} there!\n\n")
+
+    print("You completed the solution!")
+
+def start(puzzle):
+
+    display_board(puzzle)
+    print("\n\nPress 'y' to solve the puzzle, or try to solve it yourself!\n\n")
+
+    #user_solve = multiprocessing.Process(target=user_solution, args=(puzzle,))
+    #user_solve.start()
+
+    user_solve = threading.Thread(target=start, args=(problem,))
+    user_solve.start()
+
+    def solve_for_me(key):
+        if key.char == 'y':
+            user_solve.join()
+            solve(puzzle, make_small_boxes(puzzle))
+            listener.stop()
+            viewed_solution = True
+
+    listener = keyboard.Listener(on_press=solve_for_me)
+    listener.start()
+
 def display_board(board):
     global solution
     solution = board
@@ -94,40 +141,12 @@ def display_board(board):
 
 if __name__ == '__main__':
 
-    '''
-    board = [
-        [7,8,0,4,0,0,1,2,0],
-        [6,0,0,0,7,5,0,0,9],
-        [0,0,0,6,0,1,0,7,8],
-        [0,0,7,0,4,0,2,6,0],
-        [0,0,1,0,5,0,9,3,0],
-        [9,0,4,0,6,0,0,0,5],
-        [0,7,0,3,0,0,0,1,2],
-        [1,2,0,0,0,7,4,0,0],
-        [5,4,9,2,0,6,0,0,7]
-    ]
-
-    small_boxes = make_small_boxes(board)
-    solve(board, small_boxes)
-    print("&"*100)
-    display_board(solution)
-    '''
-
     problem = generate(1, make_small_boxes)
-    display_board(problem)
-    small_boxes = make_small_boxes(problem)
-    solve(problem, small_boxes)
-
-
-
-
-
-
-
-
-
-
-
+    #user_solve = threading.Thread(target=start, args=(problem,))
+    #user_solve.start()
+    start(problem)
+    #small_boxes = make_small_boxes(problem)
+    #solve(problem, small_boxes)
 
 
 
