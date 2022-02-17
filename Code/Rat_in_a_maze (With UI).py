@@ -1,14 +1,15 @@
 '''
 #Last Updated: 08/02/2022 20:40pm
 #Last Updated by: Sarthak S Kumar
-    * Pending:
-        # Yet to add the functionality to enable user solve the maze manually
-        # Functionality to check whether the user solution is correct or not
-        # Exit Screens, and refining a few parts in the application
-    * Done:
+#Changelog:
+    08/02/2022 20:40pm
         # Added Welcome Screen, User Entry Screen, and Maze UI Screen
         # Show the randomly generated maze
         # Show the solution for the randomly generated maze
+#Pending:
+        # Yet to add the functionality to enable user solve the maze manually
+        # Functionality to check whether the user solution is correct or not
+        # Exit Screens, and refining a few parts in the application
 '''
 
 import numpy as np
@@ -52,8 +53,8 @@ canvas1 = Canvas(user_entry, height=1080, width=2000)
 canvas1.pack()
 canvas1.create_image(0, 0, image=bg, anchor="nw")
 
-username = Label(user_entry, text="Your Name: ",
-                 font=(r"HK Grotesk", 30), fg="#000000", bg="#ffffff")
+username = Label(user_entry, text="Your Name: ", font=(
+    r"HK Grotesk", 30), fg="#000000", bg="#ffffff")
 username.place(anchor='e', x=800, y=450)
 
 sizebox = Entry(user_entry, font=(r"HK Grotesk", 20),
