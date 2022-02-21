@@ -32,7 +32,7 @@ master.attributes('-fullscreen', True)
 """ Welcome Screen """
 intro = Frame(master)
 
-bg = PhotoImage(file=r"Code\Assets\1st_Screen.png")
+bg = PhotoImage(file=r"Code\Rat in a Maze\Assets\1st_Screen.png")
 canvas1 = Canvas(intro, height=1080, width=2000)
 
 intro.place(anchor="nw")
@@ -48,7 +48,7 @@ intro.wait_window(intro)
 user_entry = Frame(master, background="#ffffff")
 user_entry.pack()
 
-bg = PhotoImage(file=r"Code\Assets\back_4.png")
+bg = PhotoImage(file=r"Code\Rat in a Maze\Assets\back_4.png")
 canvas1 = Canvas(user_entry, height=1080, width=2000)
 canvas1.pack()
 canvas1.create_image(0, 0, image=bg, anchor="nw")
@@ -147,7 +147,7 @@ rectbox_coordinates = [0, 0, squaresize, squaresize]
 maze_UI = Frame(master, background="#fffceb")
 maze_UI.pack()
 
-bg2 = PhotoImage(file=r"Code\Assets\back_5.png")
+bg2 = PhotoImage(file=r"Code\Rat in a Maze\Assets\back_5.png")
 canvas2 = Canvas(maze_UI, height=1080, width=2000)
 canvas2.pack()
 canvas2.create_image(0, 0, image=bg2, anchor="nw")
