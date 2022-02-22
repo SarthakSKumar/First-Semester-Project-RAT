@@ -1,21 +1,25 @@
 '''
-#Last Updated: 08/02/2022 20:40pm
+#Last Updated: 22/02/2022 21:47
 #Last Updated by: Sarthak S Kumar
 #Changelog:
-    21/02/2022 11:40am
+    22/02/2022 21:47
+        #Added Functionality to let the user solve the maze manually
+        #Comments and Decluttering
+
+    21/02/2022 11:40
         #Added the new try, prompt window (Exit Screen)
         #Fixed Username not displaying while using main()
 
-    08/02/2022 20:40pm
+    08/02/2022 20:40
         # Added Welcome Screen, User Entry Screen, and Maze UI Screen
         # Show the randomly generated maze
         # Show the solution for the randomly generated maze
 #Pending:
-        # Yet to add the functionality to enable user solve the maze manually
         # Functionality to check whether the user solution is correct or not
         # Refining a few parts in the application
 '''
 
+# MODULES
 import numpy as np
 import random
 import time
@@ -26,9 +30,11 @@ from ctypes import windll
 
 windll.shcore.SetProcessDpiAwareness(1)
 
+# Program execution begins from here
+
 
 def main():
-    """Tkinter Initialisation"""
+    """Tkinter Window Initialisation"""
     master = Tk()
     master.title("Rat in a Maze")
     master.geometry("1920x1080")
@@ -101,7 +107,7 @@ def main():
 
     user_entry.wait_window(user_entry)
 
-    """ Maze Initialisation and Solution Finding"""
+    """ Maze Initialisation and Solution Generation (Backtracking)"""
     sol_maze = []
     while True:
         global maze
@@ -142,11 +148,12 @@ def main():
             continue
         break
 
-    """Maze Display UI"""
+    """Maze UI"""
 
-    squaresize = int(60/N + 60)
+    squaresize = int(60/N + 60)  # Dynamically changes with the maze size
     tile_color = " "
     rectbox_coordinates = [0, 0, squaresize, squaresize]
+    forbidden = []  # To store co-ordinates of obstacle boxes in maze grid
 
     maze_UI = Frame(master, background="#fffceb")
     maze_UI.pack()
@@ -160,19 +167,22 @@ def main():
                   font=(r"HK Grotesk", 25), fg="#000000", bg="#ffffff")
     greet.place(anchor='c', x=960, y=150)
 
-    question_canvas = Canvas(master, height=(N*squaresize + (N)),
+    # Canvas to display Maze to be solved
+    question_canvas = Canvas(maze_UI, height=(N*squaresize + (N)),
                              width=(N*squaresize + (N)), bg='#ffffff')
     question_canvas.place(anchor='w', x=200, y=540)
 
-    solution_canvas = Canvas(master, height=(N*squaresize + (N)),
-                             width=(N*squaresize + (N)), bg='#ffffff')
-
+    # drawing the maze to be solved in the question canvas
     for i in maze:
         for j in i:
             if j == 1:
                 color = "white"
+
             else:
                 color = "grey"
+                forbidden.append((rectbox_coordinates[0], rectbox_coordinates[1],
+                                  rectbox_coordinates[2], rectbox_coordinates[3]))
+
             square = question_canvas.create_rectangle(rectbox_coordinates[0], rectbox_coordinates[1],
                                                       rectbox_coordinates[2], rectbox_coordinates[3], fill=color, width=1)
             rectbox_coordinates[0] += squaresize
@@ -182,9 +192,69 @@ def main():
         rectbox_coordinates[1] += squaresize
         rectbox_coordinates[3] += squaresize
 
+    # Rat Object to Traverse through the maze
+    rat = question_canvas.create_rectangle(
+        0, 0, squaresize, squaresize, fill="green", width=1)
+
+    # Keybind Events
+    def left(event):
+        rat_xy = question_canvas.coords(rat)
+        if rat_xy[0] > 0:
+            x = -squaresize
+            y = 0
+            if (rat_xy[0]+x, rat_xy[1], rat_xy[2]+x, rat_xy[3]) not in forbidden:
+                question_canvas.move(rat, x, y)
+        else:
+            pass
+
+    def right(event):
+        rat_xy = question_canvas.coords(rat)
+        if rat_xy[2] <= N*squaresize-1:
+            x = squaresize
+            y = 0
+            if (rat_xy[0]+x, rat_xy[1], rat_xy[2]+x, rat_xy[3]) not in forbidden:
+                question_canvas.move(rat, x, y)
+        else:
+            pass
+
+    def up(event):
+        rat_xy = question_canvas.coords(rat)
+        if rat_xy[1] > 0:
+            x = 0
+            y = -squaresize
+            if (rat_xy[0], rat_xy[1]+y, rat_xy[2], rat_xy[3]+y) not in forbidden:
+                question_canvas.move(rat, x, y)
+        else:
+            pass
+
+    def down(event):
+        rat_xy = question_canvas.coords(rat)
+        if rat_xy[3] <= N*squaresize-1:
+            x = 0
+            y = squaresize
+            if (rat_xy[0], rat_xy[1]+y, rat_xy[2], rat_xy[3]+y) not in forbidden:
+                question_canvas.move(rat, x, y)
+        else:
+            pass
+
+    master.bind("<Left>", left)
+    master.bind("<Right>", right)
+    master.bind("<Up>", up)
+    master.bind("<Down>", down)
+
     def checksolution():
         print("cde")  # to check user solution
 
+    check_sol = Button(maze_UI, text="Check", command=checksolution,
+                       bg="#4d1354", font=(r'HK Grotesk', (15)), fg="white")
+    check_sol.place(anchor='c', x=530, y=950)
+
+    # To Display the Solution Maze
+
+    solution_canvas = Canvas(maze_UI, height=(N*squaresize + (N)),
+                             width=(N*squaresize + (N)), bg='#ffffff')
+
+    # Displays Confirmation Window on clicking next
     def nextstep():
         Next = Tk()
         Next.geometry("1500x300")
@@ -245,13 +315,10 @@ def main():
                        bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
         nextb.place(anchor='c', x=960, y=950)
 
+    # Button to let computer display the solution
     comp_solve = Button(maze_UI, text="Solve Maze", command=solve,
                         bg="#4d1354", font=(r'HK Grotesk', (15)), fg="white")
     comp_solve.place(anchor='c', x=1390, y=950)
-
-    check_sol = Button(maze_UI, text="Check", command=checksolution,
-                       bg="#4d1354", font=(r'HK Grotesk', (15)), fg="white")
-    check_sol.place(anchor='c', x=530, y=950)
 
     mainloop()
 
