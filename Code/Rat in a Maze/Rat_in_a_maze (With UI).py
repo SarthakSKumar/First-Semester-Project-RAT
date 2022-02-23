@@ -4,19 +4,24 @@
 #Last Updated by: Sarthak S Kumar
 
 #Changelog:
+    23/02/2022 23:12 Sarthak S Kumar
+        # Functionality to change the color of squares visited previously
+        # Canvas size updation in maze_ui
+        # Code Refinement and Comments
+
     23/02/2022 20:54 Sarthak S Kumar
-        #Added Functionality to check whether the user solution is correct or not
-        #UI updation when user solves the maze, or gives up
-        #Added Timer functionality
-        #Code Refinement and Comments
+        # Added Functionality to check whether the user solution is correct or not
+        # UI updation when user solves the maze, or gives up
+        # Added Timer functionality
+        # Code Refinement and Comments
 
     22/02/2022 21:47 Sarthak S Kumar
-        #Added Functionality to let the user solve the maze manually
-        #Comments and Decluttering
+        # Added Functionality to let the user solve the maze manually
+        # Comments and Decluttering
 
     21/02/2022 11:40 Sarthak S Kumar
-        #Added the new try, prompt window (Exit Screen)
-        #Fixed Username not displaying while using main()
+        # Added the new try, prompt window (Exit Screen)
+        # Fixed Username not displaying while using main()
 
     08/02/2022 20:40 Sarthak S Kumar
         # Added Welcome Screen, User Entry Screen, and Maze UI Screen
@@ -47,7 +52,7 @@ def main():  # Program execution begins from here.
     """Tkinter Window Initialisation"""
     master = Tk()
     master.title("Rat in a Maze")
-    master.geometry("1900x1000")
+    master.geometry("1920x1080")
     master.configure(bg="#ffffff")
 
     """ Welcome Screen """
@@ -83,7 +88,7 @@ def main():  # Program execution begins from here.
     clicked = StringVar()
     clicked.set("Select one")
 
-    gridsizes = ["2 x 2", "3 x 3", "4 x 4", "5 x 5", "6 x 6", "7 x 7", "8 x 8", "9 x 9", "10 x 10"]
+    gridsizes = ["5 x 5", "8 x 8", "10 x 10", "15 x 15", "20 x 20", "25 x 25"]
     drop = OptionMenu(user_entry, clicked, *gridsizes)
     drop.place(anchor='w', x=960, y=540)
     drop.config(font=(r'HK Grotesk', (20)), bg='#ffffff', fg="#000000")
@@ -141,7 +146,7 @@ def main():  # Program execution begins from here.
         break
 
     """Maze UI"""
-    squaresize = int(60 / N + 60)  # Dynamically changes with the maze size
+    squaresize = int(60 / N + 30)  # Dynamically changes with the maze size
     tile_color = " "
     rectbox_coordinates = [0, 0, squaresize, squaresize]
     forbidden = []  # To store co-ordinates of obstacle boxes in maze grid
@@ -159,7 +164,7 @@ def main():  # Program execution begins from here.
 
     # Canvas to display Maze to be solved
     question_canvas = Canvas(maze_UI, height=(N * squaresize + (N)), width=(N * squaresize + (N)), bg='#ffffff')
-    question_canvas.place(anchor='w', x=200, y=540)
+    question_canvas.place(anchor='center', x=500, y=512)
 
     # Drawing the maze to be solved in the question canvas
     for i in maze:
@@ -179,7 +184,7 @@ def main():  # Program execution begins from here.
         rectbox_coordinates[3] += squaresize
 
     # Rat Object to Traverse through the maze
-    rat = question_canvas.create_rectangle(0, 0, squaresize, squaresize, fill="green", width=1)
+    rat = question_canvas.create_oval(0, 0, squaresize, squaresize, fill="green", width=0)
 
     endpoint = question_canvas.create_rectangle(squaresize*(N-1), squaresize*(N-1), squaresize*N, squaresize * N, fill="#660033")
 
@@ -196,9 +201,16 @@ def main():  # Program execution begins from here.
     labe = Label(maze_UI, text="to move the rat", font=(r"HK Grotesk", 20), fg="#000000", bg="#ffffff")
     labe.place(anchor='w', x=1385, y=540)
 
-    def pathsquare(coord):  # To change color of the path traversed
-        q = question_canvas.create_rectangle(
-            coord[0], coord[1], coord[2], coord[3], fill="purple", width=0)
+    visited_squares = []  # List to stores the squares in which the rat has been before
+
+    def pathsquare(coord):  # To change color of the path traversed accordingly
+        if [coord[0], coord[1], coord[2], coord[3]] not in ls:
+            ls.append([coord[0], coord[1], coord[2], coord[3]])
+            question_canvas.create_rectangle(coord[0], coord[1], coord[2], coord[3], fill="purple", width=0)
+            question_canvas.tag_raise(rat)
+        else:
+            question_canvas.create_rectangle(coord[0], coord[1], coord[2], coord[3], fill="orange", width=0)
+            question_canvas.tag_raise(rat)
 
     def nextstep():  # When Next button is clicked
         Next = Tk()
@@ -300,7 +312,7 @@ def main():  # Program execution begins from here.
 
         # To display the maze solution
         solution_canvas = Canvas(maze_UI, height=(N * squaresize + (N)), width=(N * squaresize + (N)), bg='#ffffff')
-        solution_canvas.place(anchor='w', x=200, y=540)
+        solution_canvas.place(anchor='center', x=500, y=512)
 
         rectbox_coordinates = [0, 0, squaresize, squaresize]
         for i in sol:
