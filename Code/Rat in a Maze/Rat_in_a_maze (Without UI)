@@ -2,7 +2,7 @@ import numpy as np
 import random
 import time
 import copy
-print("Welocome!!!\n")
+print("Welcome!!!\n")
 time.sleep(1)
 sol_maze = []
 N = int(input("Enter size of maze: "))

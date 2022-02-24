@@ -1,9 +1,15 @@
 '''
 #Project Name: Rat in a maze
-#Last Updated: 23/02/2022 23:12
+#Last Updated: 24/02/2022 15:05
 #Last Updated by: Sarthak S Kumar
 
 #Changelog:
+    24/02/2022 15:05 Sarthak S Kumar
+        # Success and Failure Messages
+        
+    24/02/2022 15:10 Varun Chandrashekar
+        # Scaling Issues resolved
+
     23/02/2022 23:12 Sarthak S Kumar
         # Functionality to change the color of squares visited previously
         # Canvas size updation in maze_ui
@@ -31,10 +37,9 @@
     08/02/2022 9:10 Vishal M Godi
         # Algorithm to solve Rat in a Maze using Backtracking
 #Pending:
-        # Resolve scaling issues
-        # Bugs in the user_entry screen and maze_ui screens
+    --Cleared
 '''
-# MODULES
+# Modules
 import numpy as np
 import random
 import time
@@ -52,7 +57,7 @@ def main():  # Program execution begins from here.
     """Tkinter Window Initialisation"""
     master = Tk()
     master.title("Rat in a Maze")
-    master.geometry("1920x1080")
+    master.geometry("1900x1080")
     master.configure(bg="#ffffff")
 
     """ Welcome Screen """
@@ -163,7 +168,7 @@ def main():  # Program execution begins from here.
     headline.place(anchor='center', x=1390, y=375)
 
     # Canvas to display Maze to be solved
-    question_canvas = Canvas(maze_UI, height=(N * squaresize + (N)), width=(N * squaresize + (N)), bg='#ffffff')
+    question_canvas = Canvas(maze_UI, height=(N * squaresize + (N)), width=(N * squaresize + (N)), bg='#ffffff', bd=0, highlightthickness=0, relief='ridge')
     question_canvas.place(anchor='center', x=500, y=512)
 
     # Drawing the maze to be solved in the question canvas
@@ -243,7 +248,7 @@ def main():  # Program execution begins from here.
         endtime = datetime.datetime.now()
         td = endtime - starttime
         elapsed = td.total_seconds()
-        successmessages = ["Yay! You made it!"]
+        successmessages = ["Yay! You made it!", "Good one fella!" "That was quite easy!", "Wonderful eh!", "You aced it!"]
         Label(maze_UI, text="🎉 Congratulations 🎉", font=(r"HK Grotesk", 40), fg="#000000", bg="#ffffff").place(anchor='e', x=1720, y=375)
         Label(maze_UI, text=random.choice(successmessages), font=(r"HK Grotesk", 30), fg="#000000", bg="#ffffff").place(anchor='center', x=1390, y=455)
         Label(maze_UI, text=f"You solved the maze in {round(elapsed, 2)} seconds", font=(r"HK Grotesk", 20), fg="#000000", bg="#ffffff").place(anchor='center', x=1390, y=520)
@@ -338,7 +343,7 @@ def main():  # Program execution begins from here.
         headline.destroy()
         comp_solve.destroy()
 
-        failmessages = ["You gave up so quick!"]
+        failmessages = ["You gave up so quick!", "Was it really tough?", "Help yourself!", "You couldn't make it!"]
         Label(maze_UI, text=random.choice(failmessages), font=(r"HK Grotesk", 40), fg="#000000", bg="#ffffff").place(anchor='center', x=1390, y=375)
         Label(maze_UI, text=f"Better luck next time!", font=(r"HK Grotesk", 20), fg="#000000", bg="#ffffff").place(anchor='center', x=1390, y=475)
 
