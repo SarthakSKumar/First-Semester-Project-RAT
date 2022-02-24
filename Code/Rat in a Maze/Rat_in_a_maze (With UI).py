@@ -1,6 +1,6 @@
 '''
 #Project Name: Rat in a maze
-#Last Updated: 23/02/2022 20:54 
+#Last Updated: 23/02/2022 23:12
 #Last Updated by: Sarthak S Kumar
 
 #Changelog:
@@ -204,8 +204,8 @@ def main():  # Program execution begins from here.
     visited_squares = []  # List to stores the squares in which the rat has been before
 
     def pathsquare(coord):  # To change color of the path traversed accordingly
-        if [coord[0], coord[1], coord[2], coord[3]] not in ls:
-            ls.append([coord[0], coord[1], coord[2], coord[3]])
+        if [coord[0], coord[1], coord[2], coord[3]] not in visited_squares:
+            visited_squares.append([coord[0], coord[1], coord[2], coord[3]])
             question_canvas.create_rectangle(coord[0], coord[1], coord[2], coord[3], fill="purple", width=0)
             question_canvas.tag_raise(rat)
         else:
@@ -227,9 +227,9 @@ def main():  # Program execution begins from here.
             main()
 
         yes = Button(Next, text="Yeah", command=restart, bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
-        yes.place(anchor='e', x=750, y=200)
+        yes.place(anchor='center', x=550, y=200)
         no = Button(Next, text="Nah", command=exit, bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
-        no.place(anchor='w', x=850, y=200)
+        no.place(anchor='center', x=950, y=200)
 
     def user_solved():  # When user manages to solve the maze
 
