@@ -230,14 +230,14 @@ def main():
         endtime = datetime.datetime.now()
         td = endtime - starttime
         elapsed = td.total_seconds()
-        successmessages = ["Yay! You made it!", "Good one fella!", "That was quite easy for ya!", "Wonderful eh!", "You aced it!"]
+
+        successmessages = ["Yay! You made it!", "Good one fella!", "That was quite easy!", "Wonderful!", "You aced it!"]
         Label(maze_UI, text="🎉 Congratulations 🎉", font=(r"HK Grotesk", 40), fg="#000000", bg="#ffffff").place(anchor='e', x=1720, y=375)
         Label(maze_UI, text=random.choice(successmessages), font=(r"HK Grotesk", 30), fg="#000000", bg="#ffffff").place(anchor='center', x=1390, y=455)
         Label(maze_UI, text=f"You solved the maze in {round(elapsed, 2)} seconds", font=(r"HK Grotesk", 20), fg="#000000", bg="#ffffff").place(anchor='center', x=1390, y=520)
 
         # Displays Confirmation Window on clicking next
-        nextb = Button(maze_UI, text="Next", command=nextstep,
-                       bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
+        nextb = Button(maze_UI, text="Next", command=nextstep, bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
         nextb.place(anchor='center', x=1390, y=600)
 
     # Keybind Events
@@ -290,11 +290,10 @@ def main():
     master.bind("<Up>", up)
     master.bind("<Down>", down)
 
-    global starttime, endtime
+    global starttime, endtime  # To start the timer
     starttime = datetime.datetime.now()
 
-    # When user gives up on solving the maze
-    def solve():
+    def solve():  # When user gives up on solving the maze
         question_canvas.destroy()
 
         # To display the maze solution
@@ -330,13 +329,11 @@ def main():
         Label(maze_UI, text=f"Better luck next time!", font=(r"HK Grotesk", 20), fg="#000000", bg="#ffffff").place(anchor='center', x=1390, y=475)
 
         # Displays Confirmation Window on clicking next
-        nextb = Button(maze_UI, text="Next", command=nextstep,
-                       bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
+        nextb = Button(maze_UI, text="Next", command=nextstep, bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
         nextb.place(anchor='center', x=1390, y=600)
 
     # Button to let computer display the solution
-    comp_solve = Button(maze_UI, text="Give Up!", command=solve,
-                        bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
+    comp_solve = Button(maze_UI, text="Give Up!", command=solve, bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
     comp_solve.place(anchor='center', x=1390, y=800)
 
     mainloop()

@@ -1,12 +1,22 @@
 '''
-#Project Name: Rat in a maze
-#Last Updated: 24/02/2022 22:59
+#Project Name: solve_sudoku
+#Last Updated: 25/02/2022 20:25
 #Last Updated by: Sarthak S Kumar
 
 #Changelog:
+    26/02/2022 20:25 Sarthak S Kumar
+        # Success and Failure Messages
+        # Solved text overlapping during user entry in question_canvas
+        # Added key bindings
+        # Resolved 'Nah' Button not working in next_UI
+        # Code Refinement and Comments
+
+    26/02/2022 13:17 Varun Chandrashekar
+        # Resolved Copy bug, while trying to store and access puzzle question
+
     25/02/2022 21:19 Sarthak S Kumar
         # Added the new try, prompt window (Exit Screen)
-        # Fixed Username not displaying while using main()
+        # Resolved Username not displaying while using main()
         # Added Functionality to let the user solve the puzzle manually
         # UI updation when user solves the puzzle, or gives up
         # Canvas size updation in sudoku_ui
@@ -20,11 +30,12 @@
         # Algorithm to solve sudoku puzzles using Backtracking
         # Command line running of the program with output
 #Pending:
-    --Cleared
+    # Scaling Issues
 '''
 # Modules
 import math
 import time
+import copy
 from generate_random import generate
 import random
 import datetime
@@ -36,7 +47,8 @@ from PIL import ImageTk
 
 windll.shcore.SetProcessDpiAwareness(1)
 
-# Global Functions
+
+""""Sudoku Global Functions"""
 
 
 def make_small_boxes(current_board):
@@ -64,10 +76,8 @@ def make_small_boxes(current_board):
 
     return small_boxes
 
-# Get empty position in the puzzle
 
-
-def empty(board):
+def empty(board):  # Get empty position in the puzzle
     for row in range(len(board)):
         for column in range(len(board[row])):
             if(board[row][column] == 0):
@@ -75,10 +85,8 @@ def empty(board):
 
     return None
 
-# Check whether board is valid if number is inserted in given position
 
-
-def is_position_valid(board, small_boxes, number, position):
+def is_position_valid(board, small_boxes, number, position):  # Check whether board is valid if number is inserted in given position
 
     for i in range(9):
         if((i != position[1]) and (number == board[position[0]][i])):  # Check in the same row
@@ -93,10 +101,8 @@ def is_position_valid(board, small_boxes, number, position):
 
     return ""
 
-# Solving the
 
-
-def csolve(puzzle, small_boxes):
+def csolve(puzzle, small_boxes):  # Solving the puzzle
 
     empty_position = empty(puzzle)
 
@@ -117,16 +123,6 @@ def csolve(puzzle, small_boxes):
             puzzle[row][column] = 0  # Backtrack
 
     return False
-
-
-def display_board(board):
-    for row in board:
-        print("—"*38)
-        for element in row:
-            if element == 0:
-                element = "◼"
-            print(" | " + str(element), end="")
-        print(" |")
 
 
 def main():
@@ -163,12 +159,14 @@ def main():
     canvas2.pack()
     canvas2.create_image(0, 0, image=bg2, anchor="nw")
 
-    headline = Label(sudoku_UI, text=f"Hello {username}\n Your Sudoku is here. Go Ahead, Solve it", font=(r"HK Grotesk", 30), fg="#ffffff", bg="#4d1354")
+    headline = Label(sudoku_UI, text=f"Hello {username}\n Your sudoku is here. Go ahead, Solve it", font=(r"HK Grotesk", 30), fg="#ffffff", bg="#4d1354")
     headline.place(anchor='center', x=1390, y=375)
 
+    # Canvas to display sudoku puzzle
     question_canvas = Canvas(sudoku_UI, height=720, width=720, bg='#4d1354', bd=0, highlightthickness=0, relief='ridge')
     question_canvas.place(anchor='center', x=500, y=512)
 
+    # To draw lines
     for i in (0, 3, 6, 9):
         question_canvas.create_line(0, 80*i, 730, 80*i, width=5, fill="#ffffff")
         question_canvas.create_line(80*i, 0, 80*i, 730, width=5, fill="#ffffff")
@@ -177,10 +175,10 @@ def main():
         question_canvas.create_line(80*i, 0, 80*i, 730, width=2, fill="#ffffff")
         question_canvas.create_line(0, 80*i, 730, 80*i, width=2, fill="#ffffff")
 
-    problem = generate(1, make_small_boxes)
+    problem = generate(1, make_small_boxes)  # Generates random valid sudoku puzzle
     y_coord, x_coord, p, q = 40, 40, 0, 0
     allowed_squares = []
-    for i in problem:
+    for i in problem:  # adding numbers from question puzzle
         for j in i:
             if j == 0:
                 j = ""
@@ -196,46 +194,7 @@ def main():
     pos = allowed_squares[1]
     selector = question_canvas.create_rectangle(pos[0], pos[1], pos[2], pos[3], fill="#4d1354", width=3, outline="#35668f")
 
-    def nextstep():  # When Next button is clicked
-        Next = Tk()
-        Next.geometry("1500x300")
-        Next.title("Solving Sudoku")
-        Next.configure(bg="#4d1354", border=1)
-        message = Label(Next, text=f"Wanna solve another maze?", font=(
-            r"HK Grotesk", 30), fg="#ffffff", bg="#4d1354")
-        message.place(anchor='center', x=750, y=100)
-
-        def restart():  # Restart the program
-            Next.destroy()
-            sudoku_UI.destroy()
-            main()
-
-        yes = Button(Next, text="Yeah", command=restart, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
-        yes.place(anchor='center', x=550, y=200)
-        no = Button(Next, text="Nah", command=exit, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
-        no.place(anchor='center', x=950, y=200)
-
-    def user_solved():  # When user manages to solve the maze
-        '''use.destroy()
-        arrow.destroy()
-        labe.destroy()'''
-
-        comp_solve.destroy()
-
-        # To check the number of seconds elapsed after game started
-        endtime = datetime.datetime.now()
-        td = endtime - starttime
-        elapsed = td.total_seconds()
-
-        successmessages = ["Yay! You made it!", "Good one fella!", "That was quite easy!", "Wonderful eh!", "You aced it!"]
-        Label(sudoku_UI, text="🎉 Congratulations 🎉", font=(r"HK Grotesk", 40), fg="#ffffff", bg="#4d1354").place(anchor='e', x=1720, y=375)
-        Label(sudoku_UI, text=random.choice(successmessages), font=(r"HK Grotesk", 30), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=455)
-        Label(sudoku_UI, text=f"You solved the maze in {round(elapsed, 2)} seconds", font=(r"HK Grotesk", 20), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=520)
-
-        nextb = Button(sudoku_UI, text="Next", command=nextstep,
-                       bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
-        nextb.place(anchor='center', x=1390, y=600)
-
+    # KeyBind Events
     def left(event):
         selector_xy = question_canvas.coords(selector)
         if selector_xy[0] > 0:
@@ -279,23 +238,20 @@ def main():
                 question_canvas.tag_raise(selector)
             else:
                 question_canvas.tag_lower(selector)
-    usersol = problem
 
-    def setusersol():
-        for i in range(len(problem)):
-            usersol.append(problem[i])
-            for j in range(len(problem)):
-                usersol[i].append(problem[i][j])
-    # setusersol()
+    usersol = copy.deepcopy(problem)  # To store a copy of the question puzzle
 
-    csolve(problem, make_small_boxes(problem))
+    csolve(problem, make_small_boxes(problem))  # Solves the sudoku puzzle
     sudoku_sol = problem
 
-    def addnum(event):
+    def addnum(event):  # To add numbers entered by user in the puzzle
         selector_xy = question_canvas.coords(selector)
-        x = question_canvas.create_text(selector_xy[0]+40, selector_xy[1]+40, font=(r"HK Grotesk", 30), fill="#f2ea52", text=event, )
-        user_sol[int((selector_xy[3]/80))-1][int((selector_xy[2]/80))-1] = int(event)
+        y = question_canvas.create_rectangle(selector_xy[0], selector_xy[1], selector_xy[2], selector_xy[3], fill="#4d1354", outline="#ffffff")
+        x = question_canvas.create_text(selector_xy[0]+40, selector_xy[1]+40, font=(r"HK Grotesk", 30), fill="#f2ea52", text=event, width=3)
 
+        usersol[int((selector_xy[3]/80))-1][int((selector_xy[2]/80))-1] = int(event)
+
+    # Keybindings
     master.bind("<Left>", left)
     master.bind("<Right>", right)
     master.bind("<Up>", up)
@@ -310,17 +266,55 @@ def main():
     master.bind("7", lambda event: addnum("7"))
     master.bind("8", lambda event: addnum("8"))
     master.bind("9", lambda event: addnum("9"))
+    master.bind("a", lambda event: printy())
 
-    global starttime, endtime
+    global starttime, endtime  # To start the timer
     starttime = datetime.datetime.now()
 
-    def solve():
+    def nextstep():  # When Next button is clicked
+        Next = Tk()
+        Next.geometry("1500x300")
+        Next.title("Solving Sudoku")
+        Next.configure(bg="#4d1354", border=1)
+        message = Label(Next, text=f"Wanna solve another maze?", font=(r"HK Grotesk", 30), fg="#ffffff", bg="#4d1354")
+        message.place(anchor='center', x=750, y=100)
+
+        def restart():  # Restart the program
+            Next.destroy()
+            sudoku_UI.destroy()
+            main()
+
+        yes = Button(Next, text="Yeah", command=restart, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
+        yes.place(anchor='center', x=550, y=200)
+        no = Button(Next, text="Nah", command=exit, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
+        no.place(anchor='center', x=950, y=200)
+
+    def user_solved():  # When user manages to solve the maze
+        comp_solve.destroy()
+        check_sol.destroy()
+
+        # To check the number of seconds elapsed after game started
+        endtime = datetime.datetime.now()
+        td = endtime - starttime
+        elapsed = td.total_seconds()
+
+        successmessages = ["Yay! You made it!", "Good one fella!", "That was quite easy!", "Wonderful!", "You aced it!"]
+        headline.configure(text=r"🎉 Congratulations 🎉")
+        Label(sudoku_UI, text=random.choice(successmessages), font=(r"HK Grotesk", 20), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=445)
+        Label(sudoku_UI, text=f"You solved the maze in {round(elapsed, 2)} seconds", font=(r"HK Grotesk", 15), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=525)
+
+        nextb = Button(sudoku_UI, text="Next", command=nextstep,
+                       bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
+        nextb.place(anchor='center', x=1390, y=600)
+
+    def solve():  # When user gives up on solving the puzzle
         question_canvas.destroy()
-        csolve(problem, make_small_boxes(problem))
+        check_sol.destroy()
         # To display the maze solution
         solution_canvas = Canvas(sudoku_UI, height=720, width=720, bg='#4d1354', bd=0, highlightthickness=0, relief='ridge')
         solution_canvas.place(anchor='center', x=500, y=512)
 
+        # To draw lines
         for i in (0, 3, 6, 9):
             solution_canvas.create_line(0, 80*i, 730, 80*i, width=5, fill="#ffffff")
             solution_canvas.create_line(80*i, 0, 80*i, 730, width=5, fill="#ffffff")
@@ -330,53 +324,39 @@ def main():
             solution_canvas.create_line(0, 80*i, 730, 80*i, width=2, fill="#ffffff")
 
         y_coord, x_coord = 40, 40
-        for i in sudoku_sol:
+        for i in sudoku_sol:  # Displays the puzzle answer
             for j in i:
                 solution_canvas.create_text(x_coord, y_coord, font=(r"HK Grotesk", 30), fill="#ffffff", text=j)
                 x_coord += 80
             x_coord = 40
             y_coord += 80
 
-        '''use.destroy()
-        arrow.destroy()
-        labe.destroy()'''
-        headline.destroy()
         comp_solve.destroy()
 
-        failmessages = ["You gave up so quick!", "Was it really tough?", "Help yourself!", "You couldn't make it!"]
-        Label(sudoku_UI, text=random.choice(failmessages), font=(r"HK Grotesk", 40), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=375)
-        Label(sudoku_UI, text=f"Better luck next time!", font=(r"HK Grotesk", 20), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=475)
+        failmessages = [r"❌ You gave up so quick!", r"🧠 Was it really tough?", r"😂 Help yourself!", "👎 You couldn't make it!"]
+        headline.configure(text=random.choice(failmessages))
+        Label(sudoku_UI, text="Better luck next time", font=(r"HK Grotesk", 20), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=445)
+        Label(sudoku_UI, text=f"With Experience comes Expertise!", font=(r"HK Grotesk", 15), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=525)
 
         # Displays Confirmation Window on clicking next
-        nextb = Button(sudoku_UI, text="Next", command=nextstep,
-                       bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
+        nextb = Button(sudoku_UI, text="Next", command=nextstep, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
         nextb.place(anchor='center', x=1390, y=600)
 
-    def error():
-        a.destroy()
-        b.destroy()
-        c.destroy()
-        headline.destroy()
-        if (10 - cnt) > 0:
-            a = Label(sudoku_UI, text="You didn't get that right.", font=(r"HK Grotesk", 40), fg="#ffffff", bg="#4d1354").place(anchor='e', x=1720, y=375)
-            b = Label(sudoku_UI, text="Try again!", font=(r"HK Grotesk", 30), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=455)
-            c = Label(sudoku_UI, text=f"Checks Remaining: {10 - cnt}", font=(r"HK Grotesk", 15), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=520)
-        else:
-            solve()
-
-    def check():
-        global cnt
+    def check():  # Runs when user checks the solution entered
         if usersol == sudoku_sol:
             user_solved()
         else:
-            cnt += 1
-            error()
+            # Error Messages to display on not getting the right solution
+            error_messages = ["You didn't get that right!", "No, something isn't right!", "Nah, its not finished yet!", "No relief mate!"]
+            headline.configure(text=random.choice(error_messages))
+            Label(sudoku_UI, text="Check it again!", font=(r"HK Grotesk", 20), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=445)
+            Label(sudoku_UI, text="Why don't you give up instead?", font=(r"HK Grotesk", 15), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=525)
 
     comp_solve = Button(sudoku_UI, text="Solve Sudoku", command=solve,
                         bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
     comp_solve.place(anchor='center', x=1640, y=800)
-    check_sol = Button(sudoku_UI, text="Check Solution", command=check,
-                       bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
+
+    check_sol = Button(sudoku_UI, text="Check Solution", command=check, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
     check_sol.place(anchor='center', x=1140, y=800)
 
     sudoku_UI.wait_window(sudoku_UI)
