@@ -53,25 +53,7 @@ from PIL import ImageTk
 windll.shcore.SetProcessDpiAwareness(1)
 
 
-def main():  # Program execution begins from here.
-    """Tkinter Window Initialisation"""
-    master = Tk()
-    master.title("Rat in a Maze")
-    master.geometry("1900x1080")
-    master.configure(bg="#ffffff")
-
-    """ Welcome Screen """
-    intro = Frame(master)
-    intro.place(anchor="nw")
-
-    bg = PhotoImage(file=r"Code\Rat in a Maze\Assets\intro.png")
-    canvas1 = Canvas(intro, height=1080, width=2000)
-    canvas1.pack()
-    canvas1.create_image(0, 0, image=bg, anchor="nw")
-
-    intro.after(3000, intro.destroy)
-    intro.wait_window(intro)
-
+def main():
     """User Entry Screen"""
     user_entry = Frame(master, background="#ffffff")
     user_entry.pack()
@@ -180,7 +162,7 @@ def main():  # Program execution begins from here.
                 color = "black"
                 forbidden.append((rectbox_coordinates[0], rectbox_coordinates[1], rectbox_coordinates[2], rectbox_coordinates[3]))
 
-            square = question_canvas.create_rectangle(rectbox_coordinates[0], rectbox_coordinates[1], rectbox_coordinates[2], rectbox_coordinates[3], fill=color, width=0)
+            square = question_canvas.create_rectangle(rectbox_coordinates[0], rectbox_coordinates[1], rectbox_coordinates[2], rectbox_coordinates[3], fill=color, width=1)
             rectbox_coordinates[0] += squaresize
             rectbox_coordinates[2] += squaresize
 
@@ -228,7 +210,7 @@ def main():  # Program execution begins from here.
 
         def restart():  # Restart the program
             Next.destroy()
-            master.destroy()
+            maze_UI.destroy()
             main()
 
         yes = Button(Next, text="Yeah", command=restart, bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
@@ -248,7 +230,7 @@ def main():  # Program execution begins from here.
         endtime = datetime.datetime.now()
         td = endtime - starttime
         elapsed = td.total_seconds()
-        successmessages = ["Yay! You made it!", "Good one fella!" "That was quite easy!", "Wonderful eh!", "You aced it!"]
+        successmessages = ["Yay! You made it!", "Good one fella!", "That was quite easy for ya!", "Wonderful eh!", "You aced it!"]
         Label(maze_UI, text="🎉 Congratulations 🎉", font=(r"HK Grotesk", 40), fg="#000000", bg="#ffffff").place(anchor='e', x=1720, y=375)
         Label(maze_UI, text=random.choice(successmessages), font=(r"HK Grotesk", 30), fg="#000000", bg="#ffffff").place(anchor='center', x=1390, y=455)
         Label(maze_UI, text=f"You solved the maze in {round(elapsed, 2)} seconds", font=(r"HK Grotesk", 20), fg="#000000", bg="#ffffff").place(anchor='center', x=1390, y=520)
@@ -329,7 +311,7 @@ def main():  # Program execution begins from here.
                 else:
                     color = "black"
                 square = solution_canvas.create_rectangle(
-                    rectbox_coordinates[0], rectbox_coordinates[1], rectbox_coordinates[2], rectbox_coordinates[3], fill=color, width=0)
+                    rectbox_coordinates[0], rectbox_coordinates[1], rectbox_coordinates[2], rectbox_coordinates[3], fill=color, width=1)
                 rectbox_coordinates[0] += squaresize
                 rectbox_coordinates[2] += squaresize
 
@@ -360,5 +342,22 @@ def main():  # Program execution begins from here.
     mainloop()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # Program Execution begins from here.
+    """Tkinter Window Initialisation"""
+    master = Tk()
+    master.title("Rat in a Maze")
+    master.geometry("1900x1000")
+    master.configure(bg="#ffffff")
+
+    """ Welcome Screen """
+    intro = Frame(master)
+    intro.place(anchor="nw")
+
+    bg = PhotoImage(file=r"Code\Rat in a Maze\Assets\intro.png")
+    canvas1 = Canvas(intro, height=1080, width=2000)
+    canvas1.pack()
+    canvas1.create_image(0, 0, image=bg, anchor="nw")
+
+    intro.after(3000, intro.destroy)
+    intro.wait_window(intro)
     main()
