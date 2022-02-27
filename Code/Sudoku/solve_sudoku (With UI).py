@@ -5,6 +5,7 @@
 
 #Changelog:
     27/02/2022 15:29 Sarthak S Kumar
+        # Fixed 'Nah' Button Not working in next_UI
         # Fixed Numbers overlaying above existing numbers in Sudoku_UI
         # Added play info in sudoku_UI screen
         # Added chances available functionality
