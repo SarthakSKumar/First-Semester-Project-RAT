@@ -7,36 +7,28 @@
         # Fixed Overlapping Text when user solves the maze
         # Widget Scaling Corrections
         # Fixed Background Images descaling and moving out of frame
-
     27/02/2022 22:59 Varun Chandrashekar
         # Function to manage maze box sizes and other fixes
         # Fixed obstacle boxes appearing after backtracking solution
-
     24/02/2022 15:05 Sarthak S Kumar
         # Success and Failure Messages
-
     24/02/2022 15:10 Varun Chandrashekar
         # Scaling Issues resolved
-
     23/02/2022 23:12 Sarthak S Kumar
         # Functionality to change the color of squares visited previously
         # Canvas size updation in maze_ui
         # Code Refinement and Comments
-
     23/02/2022 20:54 Sarthak S Kumar
         # Added Functionality to check whether the user solution is correct or not
         # UI updation when user solves the maze, or gives up
         # Added Timer functionality
         # Code Refinement and Comments
-
     22/02/2022 21:47 Sarthak S Kumar
         # Added Functionality to let the user solve the maze manually
         # Comments and Decluttering
-
     21/02/2022 11:40 Sarthak S Kumar
         # Added the new try, prompt window (Exit Screen)
         # Fixed Username not displaying while using main()
-
     08/02/2022 20:40 Sarthak S Kumar
         # Added Welcome Screen, User Entry Screen, and Maze UI Screen
         # Show the randomly generated maze
@@ -68,10 +60,8 @@ first_puzzle = True
 
 
 def manage_box_size(height, width, N):
-    size = int(((height*width)/(100*N**2)))
-    if size > 50:
-        return manage_box_size(height, width, 1.5*N)
-    return size
+    squaresize = int((((height*width)/(5))/(N**2))**0.5)
+    return squaresize
 
 
 def main():  # Program execution begins from here.

@@ -1,11 +1,13 @@
 '''
 #Project Name: solve_sudoku
-#Last Updated: 27/02/2022 10:34
+#Last Updated: 27/02/2022 15:29
 #Last Updated by: Sarthak S Kumar
 
 #Changelog:
-    27/02/2022 10:34 Sarthak S Kumar
+    27/02/2022 15:29 Sarthak S Kumar
+        # Fixed Numbers overlaying above existing numbers in Sudoku_UI
         # Added play info in sudoku_UI screen
+        # Added chances available functionality
 
     26/02/2022 20:25 Sarthak S Kumar
         # Success and Failure Messages
@@ -260,10 +262,10 @@ def main():
 
     def addnum(event):  # To add numbers entered by user in the puzzle
         selector_xy = question_canvas.coords(selector)
-        y = question_canvas.create_rectangle(selector_xy[0], selector_xy[1], selector_xy[2], selector_xy[3], fill="#4d1354", outline="#ffffff", width=2)
-        x = question_canvas.create_text(selector_xy[0]+40, selector_xy[1]+40, font=(r"HK Grotesk", 30), fill="#f2ea52", text=event)
-
-        usersol[int((selector_xy[3]/80))-1][int((selector_xy[2]/80))-1] = int(event)
+        if tuple(selector_xy) in allowed_squares:
+            y = question_canvas.create_rectangle(selector_xy[0], selector_xy[1], selector_xy[2], selector_xy[3], fill="#4d1354", outline="#ffffff", width=2)
+            x = question_canvas.create_text(selector_xy[0]+40, selector_xy[1]+40, font=(r"HK Grotesk", 30), fill="#f2ea52", text=event)
+            usersol[int((selector_xy[3]/80))-1][int((selector_xy[2]/80))-1] = int(event)
 
     # Keybindings
     master.bind("<Left>", left)
@@ -326,6 +328,10 @@ def main():
     def solve():  # When user gives up on solving the puzzle
         question_canvas.destroy()
         check_sol.destroy()
+        arrow.destroy()
+        numpad.destroy()
+        use.destroy()
+        use2.destroy()
         # To display the maze solution
         solution_canvas = Canvas(sudoku_UI, height=720, width=720, bg='#4d1354', bd=0, highlightthickness=0, relief='ridge')
         solution_canvas.place(anchor='center', x=500, y=512)
@@ -357,15 +363,27 @@ def main():
         nextb = Button(sudoku_UI, text="Next", command=nextstep, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
         nextb.place(anchor='center', x=1390, y=600)
 
+    chances = 0
+
     def check():  # Runs when user checks the solution entered
+        nonlocal chances
         if usersol == sudoku_sol:
             user_solved()
-        else:
-            # Error Messages to display on not getting the right solution
+
+        if chances == 0:
+            use2.destroy()
+            arrow.destroy()
+            use.destroy()
+            numpad.destroy()
+        # Error Messages to display on not getting the right solution
+        if chances < 9:
+            chances += 1
             error_messages = ["You didn't get that right!", "No, something isn't right!", "Nah, its not finished yet!", "No relief mate!"]
             headline.configure(text=random.choice(error_messages))
             Label(sudoku_UI, text="Check it again!", font=(r"HK Grotesk", 20), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=445)
-            Label(sudoku_UI, text="Why don't you give up instead?", font=(r"HK Grotesk", 15), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=525)
+            Label(sudoku_UI, text=f"Chances Remaining: {10-chances}", font=(r"HK Grotesk", 15), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=525)
+        else:
+            solve()
 
     comp_solve = Button(sudoku_UI, text="Solve Sudoku", command=solve,
                         bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
