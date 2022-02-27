@@ -1,9 +1,12 @@
 '''
 #Project Name: solve_sudoku
-#Last Updated: 25/02/2022 20:25
+#Last Updated: 27/02/2022 10:34
 #Last Updated by: Sarthak S Kumar
 
 #Changelog:
+    27/02/2022 10:34 Sarthak S Kumar
+        # Added play info in sudoku_UI screen
+
     26/02/2022 20:25 Sarthak S Kumar
         # Success and Failure Messages
         # Solved text overlapping during user entry in question_canvas
@@ -53,17 +56,7 @@ windll.shcore.SetProcessDpiAwareness(1)
 
 def make_small_boxes(current_board):
 
-    small_boxes = {
-        "11": [],
-        "12": [],
-        "13": [],
-        "21": [],
-        "22": [],
-        "23": [],
-        "31": [],
-        "32": [],
-        "33": [],
-    }
+    small_boxes = {"11": [], "12": [], "13": [], "21": [], "22": [], "23": [], "31": [], "32": [], "33": []}
 
     for row in range(1, 10):
         arg1 = math.ceil(row/3)
@@ -162,12 +155,33 @@ def main():
     headline = Label(sudoku_UI, text=f"Hello {username}\n Your sudoku is here. Go ahead, Solve it", font=(r"HK Grotesk", 30), fg="#ffffff", bg="#4d1354")
     headline.place(anchor='center', x=1390, y=375)
 
+    use = Label(sudoku_UI, text="Use" + " "*16 + "to enter numbers", font=(r"HK Grotesk", 20), fg="#ffffff", bg="#4d1354")
+    use.place(anchor='center', x=1395, y=540)
+
+    img = Image.open(r"Code\Sudoku\Assets\numpad.png")  # ./Assets/arrowkeys.png (Mac)
+    img = img.resize((100, 100), Image.ANTIALIAS)
+    photoImg = ImageTk.PhotoImage(img)
+
+    numpad = Canvas(sudoku_UI, width=100, height=100, bg="#4d1354", bd=0, highlightthickness=0, relief='ridge')
+    numpad.place(x=1295, y=540, anchor='center')
+    numpad.create_image(0, 0, image=photoImg, anchor='nw')
+
+    use2 = Label(sudoku_UI, text="and" + " "*16 + "to move the selector", font=(r"HK Grotesk", 20), fg="#ffffff", bg="#4d1354")
+    use2.place(anchor='center', x=1390, y=640)
+
+    img2 = Image.open(r"Code\Sudoku\Assets\arrowkeys.png")  # ./Assets/arrowkeys.png (Mac)
+    img2 = img2.resize((100, 100), Image.ANTIALIAS)
+    photoImg2 = ImageTk.PhotoImage(img2)
+
+    arrow = Canvas(sudoku_UI, width=100, height=100, bg="#4d1354", bd=0, highlightthickness=0, relief='ridge')
+    arrow.place(x=1270, y=640, anchor='center')
+    arrow.create_image(0, 0, image=photoImg2, anchor='nw')
+
     # Canvas to display sudoku puzzle
     question_canvas = Canvas(sudoku_UI, height=720, width=720, bg='#4d1354', bd=0, highlightthickness=0, relief='ridge')
     question_canvas.place(anchor='center', x=500, y=512)
 
-    # To draw lines
-    for i in (0, 3, 6, 9):
+    for i in (0, 3, 6, 9):  # To draw lines
         question_canvas.create_line(0, 80*i, 730, 80*i, width=5, fill="#ffffff")
         question_canvas.create_line(80*i, 0, 80*i, 730, width=5, fill="#ffffff")
 
@@ -246,8 +260,8 @@ def main():
 
     def addnum(event):  # To add numbers entered by user in the puzzle
         selector_xy = question_canvas.coords(selector)
-        y = question_canvas.create_rectangle(selector_xy[0], selector_xy[1], selector_xy[2], selector_xy[3], fill="#4d1354", outline="#ffffff")
-        x = question_canvas.create_text(selector_xy[0]+40, selector_xy[1]+40, font=(r"HK Grotesk", 30), fill="#f2ea52", text=event, width=3)
+        y = question_canvas.create_rectangle(selector_xy[0], selector_xy[1], selector_xy[2], selector_xy[3], fill="#4d1354", outline="#ffffff", width=2)
+        x = question_canvas.create_text(selector_xy[0]+40, selector_xy[1]+40, font=(r"HK Grotesk", 30), fill="#f2ea52", text=event)
 
         usersol[int((selector_xy[3]/80))-1][int((selector_xy[2]/80))-1] = int(event)
 
@@ -266,7 +280,6 @@ def main():
     master.bind("7", lambda event: addnum("7"))
     master.bind("8", lambda event: addnum("8"))
     master.bind("9", lambda event: addnum("9"))
-    master.bind("a", lambda event: printy())
 
     global starttime, endtime  # To start the timer
     starttime = datetime.datetime.now()
@@ -292,6 +305,10 @@ def main():
     def user_solved():  # When user manages to solve the maze
         comp_solve.destroy()
         check_sol.destroy()
+        arrow.destroy()
+        numpad.destroy()
+        use.destroy()
+        use2.destroy()
 
         # To check the number of seconds elapsed after game started
         endtime = datetime.datetime.now()
@@ -303,8 +320,7 @@ def main():
         Label(sudoku_UI, text=random.choice(successmessages), font=(r"HK Grotesk", 20), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=445)
         Label(sudoku_UI, text=f"You solved the maze in {round(elapsed, 2)} seconds", font=(r"HK Grotesk", 15), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=525)
 
-        nextb = Button(sudoku_UI, text="Next", command=nextstep,
-                       bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
+        nextb = Button(sudoku_UI, text="Next", command=nextstep, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
         nextb.place(anchor='center', x=1390, y=600)
 
     def solve():  # When user gives up on solving the puzzle
@@ -314,8 +330,7 @@ def main():
         solution_canvas = Canvas(sudoku_UI, height=720, width=720, bg='#4d1354', bd=0, highlightthickness=0, relief='ridge')
         solution_canvas.place(anchor='center', x=500, y=512)
 
-        # To draw lines
-        for i in (0, 3, 6, 9):
+        for i in (0, 3, 6, 9):  # To draw lines
             solution_canvas.create_line(0, 80*i, 730, 80*i, width=5, fill="#ffffff")
             solution_canvas.create_line(80*i, 0, 80*i, 730, width=5, fill="#ffffff")
 

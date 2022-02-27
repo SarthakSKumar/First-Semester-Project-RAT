@@ -58,9 +58,7 @@ from tkinter import ttk
 from PIL import Image
 from PIL import ImageTk
 
-# To Enable High Resolution Scaling in Windows OS
-
-from ctypes import windll
+from ctypes import windll  # To Enable High Resolution Scaling in Windows OS
 windll.shcore.SetProcessDpiAwareness(1)
 
 global first_puzzle
@@ -289,8 +287,7 @@ def main():  # Program execution begins from here.
         Label(maze_UI, text=f"You solved the maze in {round(elapsed, 2)} seconds", font=(r"HK Grotesk", 20), fg="#000000", bg="#ffffff").place(anchor='center', x=(1390/1920)*width, y=(520/1080)*height)
 
         # Displays Confirmation Window on clicking next
-        nextb = Button(maze_UI, text="Next", command=nextstep,
-                       bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
+        nextb = Button(maze_UI, text="Next", command=nextstep, bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
         nextb.place(anchor='center', x=(1390/1920)*width, y=(600/1080)*height)
 
     # Keybind Events
@@ -363,8 +360,7 @@ def main():  # Program execution begins from here.
                     color = "white"
                 else:
                     color = "black"
-                square = solution_canvas.create_rectangle(
-                    rectbox_coordinates[0], rectbox_coordinates[1], rectbox_coordinates[2], rectbox_coordinates[3], fill=color, width=0)
+                square = solution_canvas.create_rectangle(rectbox_coordinates[0], rectbox_coordinates[1], rectbox_coordinates[2], rectbox_coordinates[3], fill=color, width=0)
                 rectbox_coordinates[0] += squaresize
                 rectbox_coordinates[2] += squaresize
 
