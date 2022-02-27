@@ -64,7 +64,7 @@ def manage_box_size(height, width, N):
     return squaresize
 
 
-def main():  # Program execution begins from here.
+def riam_main():  # Program execution begins from here.
     """Tkinter Window Initialisation"""
     master = Tk()
     master.title("Rat in a Maze")
@@ -91,6 +91,7 @@ def main():  # Program execution begins from here.
 
         intro.after(3000, intro.destroy)
         intro.wait_window(intro)
+        first_puzzle = False
 
     """User Entry Screen"""
     user_entry = Frame(master, background="#ffffff")
@@ -211,7 +212,7 @@ def main():  # Program execution begins from here.
     # Rat Object to Traverse through the maze
     rat = question_canvas.create_oval(0, 0, squaresize, squaresize, fill="green", width=0)
 
-    endpoint = question_canvas.create_rectangle(squaresize*(N-1), squaresize*(N-1), squaresize*N, squaresize * N, fill="#660033")
+    endpoint = question_canvas.create_rectangle(squaresize*(N-1), squaresize*(N-1), squaresize*N, squaresize * N, fill="#660033", outline="#660033")
 
     use = Label(maze_UI, text="Use", font=(r"HK Grotesk", 20), fg="#000000", bg="#ffffff")
     use.place(anchor='e', x=((height+width)/2 - (width/7)), y=(540/1080)*height)

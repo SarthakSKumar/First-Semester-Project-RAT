@@ -39,18 +39,16 @@
     # Scaling Issues
 '''
 # Modules
-import math
-import time
 import copy
 from generate_random import generate
 import random
 import datetime
 from tkinter import *
 from tkinter import ttk
-from ctypes import windll
 from PIL import Image
 from PIL import ImageTk
 
+from ctypes import windll
 windll.shcore.SetProcessDpiAwareness(1)
 
 
@@ -121,7 +119,31 @@ def csolve(puzzle, small_boxes):  # Solving the puzzle
     return False
 
 
-def main():
+global first_puzzle
+first_puzzle = True
+
+
+def sudoku_main():
+    """Tkinter Window Initialisation"""
+    master = Tk()
+    master.title("Sudoku")
+    master.geometry("1900x1080")
+    master.configure(bg="#4d1354")
+
+    if first_puzzle:
+        """ Welcome Screen """
+        intro = Frame(master)
+        intro.place(anchor="nw")
+
+        bg = PhotoImage(file=r"Code\Sudoku\Assets\intro.png")
+        canvas1 = Canvas(intro, height=1080, width=2000)
+        canvas1.pack()
+        canvas1.create_image(0, 0, image=bg, anchor="nw")
+
+        intro.after(3000, intro.destroy)
+        intro.wait_window(intro)
+        first_puzzle = False
+
     """User Entry Screen"""
     user_entry = Frame(master, background="#4d1354")
     user_entry.pack()
@@ -397,21 +419,5 @@ def main():
 
 
 if __name__ == '__main__':  # Program Execution begins here
-    """Tkinter Window Initialisation"""
-    master = Tk()
-    master.title("Sudoku")
-    master.geometry("1900x1080")
-    master.configure(bg="#4d1354")
 
-    """ Welcome Screen """
-    intro = Frame(master)
-    intro.place(anchor="nw")
-
-    bg = PhotoImage(file=r"Code\Sudoku\Assets\intro.png")
-    canvas1 = Canvas(intro, height=1080, width=2000)
-    canvas1.pack()
-    canvas1.create_image(0, 0, image=bg, anchor="nw")
-
-    intro.after(3000, intro.destroy)
-    intro.wait_window(intro)
-    main()
+    sudoku_main()
