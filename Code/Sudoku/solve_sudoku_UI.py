@@ -40,6 +40,7 @@
 '''
 # Modules
 import copy
+import math
 from generate_random import generate
 import random
 import datetime
@@ -142,7 +143,6 @@ def sudoku_main():
 
         intro.after(3000, intro.destroy)
         intro.wait_window(intro)
-        first_puzzle = False
 
     """User Entry Screen"""
     user_entry = Frame(master, background="#4d1354")
@@ -319,12 +319,12 @@ def sudoku_main():
 
         def restart():  # Restart the program
             Next.destroy()
-            sudoku_UI.destroy()
-            main()
+            master.destroy()
+            sudoku_main()
 
         yes = Button(Next, text="Yeah", command=restart, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
         yes.place(anchor='center', x=550, y=200)
-        no = Button(Next, text="Nah", command=lambda: exit(), bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
+        no = Button(Next, text="Nah", command=exit, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
         no.place(anchor='center', x=950, y=200)
 
     def user_solved():  # When user manages to solve the maze
@@ -392,26 +392,28 @@ def sudoku_main():
         nonlocal chances
         if usersol == sudoku_sol:
             user_solved()
-
-        if chances == 0:
-            use2.destroy()
-            arrow.destroy()
-            use.destroy()
-            numpad.destroy()
-        # Error Messages to display on not getting the right solution
-        if chances < 9:
-            chances += 1
-            error_messages = ["You didn't get that right!", "No, something isn't right!", "Nah, its not finished yet!", "No relief mate!"]
-            headline.configure(text=random.choice(error_messages))
-            Label(sudoku_UI, text="Check it again!", font=(r"HK Grotesk", 20), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=445)
-            Label(sudoku_UI, text=f"Chances Remaining: {10-chances}", font=(r"HK Grotesk", 15), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=525)
         else:
-            solve()
+            if chances == 0:
+                use2.destroy()
+                arrow.destroy()
+                use.destroy()
+                numpad.destroy()
+            # Error Messages to display on not getting the right solution
+            if chances < 9:
+                chances += 1
+                error_messages = ["You didn't get that right!", "No, something isn't right!", "Nah, its not finished yet!", "No relief mate!"]
+                headline.configure(text=random.choice(error_messages))
+                Label(sudoku_UI, text="Check it again!", font=(r"HK Grotesk", 20), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=445)
+                Label(sudoku_UI, text=f"Chances Remaining: {10-chances}", font=(r"HK Grotesk", 15), fg="#ffffff", bg="#4d1354").place(anchor='center', x=1390, y=525)
+            else:
+                solve()
 
+    # Button to let computer solve the puzzle
     comp_solve = Button(sudoku_UI, text="Solve Sudoku", command=solve,
                         bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
     comp_solve.place(anchor='center', x=1640, y=800)
 
+    # Button to check the user solution
     check_sol = Button(sudoku_UI, text="Check Solution", command=check, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
     check_sol.place(anchor='center', x=1140, y=800)
 

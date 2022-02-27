@@ -91,7 +91,6 @@ def riam_main():  # Program execution begins from here.
 
         intro.after(3000, intro.destroy)
         intro.wait_window(intro)
-        first_puzzle = False
 
     """User Entry Screen"""
     user_entry = Frame(master, background="#ffffff")
@@ -253,7 +252,7 @@ def riam_main():  # Program execution begins from here.
             Next.destroy()
             master.destroy()
             first_puzzle = False
-            main()
+            riam_main()
 
         yes = Button(Next, text="Yeah", command=restart, bg="#4d1354", font=(r'HK Grotesk', (20)), fg="white")
         yes.place(anchor='center', x=(550/1080)*height, y=(200/1080)*height)
@@ -383,4 +382,4 @@ def riam_main():  # Program execution begins from here.
 
 
 if __name__ == "__main__":
-    main()
+    riam_main()

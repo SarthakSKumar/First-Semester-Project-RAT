@@ -1,3 +1,5 @@
+# Modules
+
 from tkinter import *
 
 from ctypes import windll  # To Enable High Resolution Scaling in Windows OS
