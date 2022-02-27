@@ -301,7 +301,7 @@ def main():
 
         yes = Button(Next, text="Yeah", command=restart, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
         yes.place(anchor='center', x=550, y=200)
-        no = Button(Next, text="Nah", command=exit, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
+        no = Button(Next, text="Nah", command=lambda: exit(), bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
         no.place(anchor='center', x=950, y=200)
 
     def user_solved():  # When user manages to solve the maze
@@ -392,7 +392,7 @@ def main():
     check_sol = Button(sudoku_UI, text="Check Solution", command=check, bg="#ffffff", font=(r'HK Grotesk', (20)), fg="#4d1354")
     check_sol.place(anchor='center', x=1140, y=800)
 
-    sudoku_UI.wait_window(sudoku_UI)
+    mainloop()
 
 
 if __name__ == '__main__':  # Program Execution begins here
