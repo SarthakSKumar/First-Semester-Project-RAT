@@ -159,7 +159,7 @@ def main():  # Program execution begins from here.
                 if BACKTRACKING_ALGORITHM(maze, x, y + 1, sol) == True:
                     return True
 
-                sol[x][y] = 0
+                sol[x][y] = 1
                 return False
 
         def check(maze, x, y):
