@@ -20,5 +20,5 @@
  </table>
 
 ### Conclusion 
-This is our 1st-Semester Project, whose final review was completed in March 2022.✌️
+This is our 1st-Semester Project, whose final review was completed in March 2022.
 
